@@ -1,0 +1,26 @@
+language: bash
+dist: trusty
+os:
+- linux
+
+env:
+    - CURRENTVERSION=2.23.0
+
+addons:
+  apt:
+    packages:
+    # install cross compilers for cgo support.
+    - gcc-aarch64-linux-gnu
+    - libc6-dev-arm64-cross
+before_script:
+- git clone https://github.com/aonafowora/horizon-deb-packager.git
+# - git remote add upstream git@github.com:open-horizon/horizon-deb-packager.git
+script:
+- cd horizon-deb-packager
+- git fetch upstream && git checkout master && git pull upstream master
+- export ANAX_BRANCH_VERSION=${CURRENTVERSION}[-branch]
+- make clean && echo $ANAX_BRANCH_VERSION > VERSION && make meta
+- git tag -a $CURRENTVERSION -m "$CURRENTVERSION" && git checkout -b PR
+- make publish-meta
+
+
