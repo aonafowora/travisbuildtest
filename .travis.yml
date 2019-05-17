@@ -22,5 +22,3 @@ script:
 - make clean && echo $ANAX_BRANCH_VERSION > VERSION && make meta
 - git tag -a $CURRENTVERSION -m "$CURRENTVERSION" && git checkout -b PR
 - make publish-meta
-
-
